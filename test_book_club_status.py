@@ -3,6 +3,7 @@ from jsonschema import validate
 
 from schemas.club_schema import club_response
 from schemas.get_clubs_response_schema import status_response
+from schemas.invalid_search_schema import invalid_search
 from schemas.search_schema import search_title_schema
 
 
@@ -76,5 +77,6 @@ def test_non_existent_book_title():
     assert response.status_code == 200
 
     body = response.json()
+    validate(body, schema=invalid_search)
 
     assert body["count"] == 0
