@@ -35,7 +35,8 @@ def test_club_1_book_title():
 
 
 def test_number_of_clubs_per_page_with_page_size_10():
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/?page=1&page_size=10")
+    params = {"page": 1, "page_size": 10}
+    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
@@ -55,7 +56,8 @@ def test_number_of_clubs_per_page_with_page_size_10():
 
 
 def test_search_by_book_title():
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/?search=The%20Other%20Side%20of%20Silence")
+    params = {"search": "The Other Side of Silence"}
+    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
@@ -69,7 +71,8 @@ def test_search_by_book_title():
 
 
 def test_non_existent_book_title():
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/?search=Non+existent+book")
+    params = {"search": "Non existent book"}
+    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
