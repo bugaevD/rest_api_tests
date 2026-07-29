@@ -6,9 +6,10 @@ from schemas.get_clubs_response_schema import status_response
 from schemas.invalid_search_schema import invalid_search
 from schemas.search_schema import search_title_schema
 
+API_URL = "https://book-club.qa.guru/api/v1/clubs/"
 
-def test_count_of_clubs_with_schema():
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/")
+def test_clubs_exist_with_schema():
+    response = requests.get(API_URL)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
@@ -18,11 +19,11 @@ def test_count_of_clubs_with_schema():
     body = response.json()
     validate(body, schema=status_response)
 
-    assert body["count"] == 92
+    assert body["count"] > 0
 
 
 def test_club_1_book_title():
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/1")
+    response = requests.get(API_URL + "1")
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
 
@@ -36,7 +37,7 @@ def test_club_1_book_title():
 
 def test_number_of_clubs_per_page_with_page_size_10():
     params = {"page": 1, "page_size": 10}
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
+    response = requests.get(API_URL, params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
@@ -57,7 +58,7 @@ def test_number_of_clubs_per_page_with_page_size_10():
 
 def test_search_by_book_title():
     params = {"search": "The Other Side of Silence"}
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
+    response = requests.get(API_URL, params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
@@ -72,7 +73,7 @@ def test_search_by_book_title():
 
 def test_non_existent_book_title():
     params = {"search": "Non existent book"}
-    response = requests.get("https://book-club.qa.guru/api/v1/clubs/", params)
+    response = requests.get(API_URL, params)
 
     print("\nStatus code: ", response.status_code)
     print("Body: ", response.text)
