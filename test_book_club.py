@@ -46,11 +46,7 @@ def test_number_of_clubs_per_page_with_page_size_10():
     body = response.json()
     validate(body, schema=status_response)
 
-    total_of_clubs_per_page = 0
-
-    for club in body["results"]:
-        total_of_clubs_per_page += 1
-    print("Total number of clubs: ", total_of_clubs_per_page)
+    total_of_clubs_per_page = len(body["results"])
 
     assert total_of_clubs_per_page == 10
 
@@ -83,3 +79,26 @@ def test_non_existent_book_title():
     validate(body, schema=invalid_search)
 
     assert body["count"] == 0
+
+def test_get_club():
+    response = requests.get('https://book-club.qa.guru/api/v1/clubs/')
+
+    print("\nStatus code:", response.status_code)
+    print("Headers:", response.headers)
+    print("Body:", response.text)
+
+    assert response.status_code == 200
+
+    body = response.json()
+    validate(body, schema=status_response)
+
+    club = body['results'][0]
+
+    assert club['id'] == 1
+    assert club['bookTitle'] == "Of Mice and Men"
+    assert club['bookAuthors'] == "Mrs. Oma White"
+    assert club['publicationYear'] == 1806
+    assert club['description'] == "Chuck Norris doesn't use pointers, he just points, and memory obeys."
+    assert club['telegramChatLink'] == "https://t.me/Ulysses"
+    assert club['owner'] == 12
+    assert 12 in club['members']
