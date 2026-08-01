@@ -43,7 +43,7 @@ def test_register_with_existing_username():
     body = response.json()
     validate(body, schema=already_registered_schema)
 
-    assert ['A user with that username already exists.'] == body["username"]
+    assert body["username"] == ['A user with that username already exists.']
 
 
 @pytest.mark.parametrize("username,password,status_code,schema,body_key", [
@@ -66,7 +66,7 @@ def test_blank_fields_register_user(username, password, status_code, schema, bod
     body = response.json()
     validate(body, schema=schema)
     for key in body_key:
-        assert ["This field may not be blank."] == body[key]
+        assert body[key] == ["This field may not be blank."]
 
 
 def test_very_long_username():
@@ -81,7 +81,7 @@ def test_very_long_username():
     body = response.json()
     validate(body, schema=very_long_username_schema)
 
-    assert ['Ensure this field has no more than 150 characters.'] == body["username"]
+    assert body["username"] == ['Ensure this field has no more than 150 characters.']
 
 
 def test_very_long_password():
@@ -96,7 +96,7 @@ def test_very_long_password():
     body = response.json()
     validate(body, schema=very_long_password_schema)
 
-    assert ['Ensure this field has no more than 128 characters.'] == body["password"]
+    assert body["password"] == ['Ensure this field has no more than 128 characters.']
 
 
 def test_very_long_both_fields():
@@ -111,8 +111,8 @@ def test_very_long_both_fields():
     body = response.json()
     validate(body, schema=very_long_both_fields_schema)
 
-    assert ['Ensure this field has no more than 150 characters.'] == body["username"]
-    assert ['Ensure this field has no more than 128 characters.'] == body["password"]
+    assert body["username"] == ['Ensure this field has no more than 150 characters.']
+    assert body["password"] == ['Ensure this field has no more than 128 characters.']
 
 
 @pytest.mark.parametrize("username,password,status_code,schema,body_key", [
@@ -131,8 +131,7 @@ def test_invalid_username(username, password, status_code, schema, body_key):
     body = response.json()
     validate(body, schema=schema)
 
-    assert ['Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.'] == body[
-        body_key]
+    assert body[body_key] == ['Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.']
 
 @pytest.mark.parametrize("username,password,status_code,schema,body_key", [
     ("A", fake.password(), 400, very_short_username_schema, "username"),
@@ -152,7 +151,7 @@ def test_min_length_validation_register(username, password, status_code, schema,
     body = response.json()
     validate(body, schema=schema)
     for key in body_key:
-        assert ["This field should be at least 3 characters"] == body[key]
+        assert body[key] == ["This field should be at least 3 characters"]
 
 @pytest.mark.parametrize("request_body,status_code,schema, body_key",[
     ({"username": USERNAME}, 400, missing_password_schema, "password"),
@@ -170,7 +169,7 @@ def test_missing_required_field_auth(request_body, status_code, schema, body_key
     body = response.json()
     validate(body, schema=schema)
 
-    assert ['This field is required.'] == body[body_key]
+    assert body[body_key] == ['This field is required.'] 
 
 @pytest.mark.parametrize("request_body,status_code,headers", [
     ({"username": fake.user_name(), "password": fake.password()}, 415, {"content-type": "image/png"}),
