@@ -12,11 +12,12 @@ USERNAME = "bugaev"
 PASSWORD = "qwerty"
 
 
-def test_success_auth():
+def test_successful_auth():
     request_body = {"username": USERNAME, "password": PASSWORD}
     response = requests.post(API_URL + "/auth/token/", json=request_body)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == 200
@@ -37,10 +38,11 @@ def test_success_auth():
 
 
 def test_get_user():
-    headers = {"Authorization": "Bearer " + test_success_auth()}
+    headers = {"Authorization": "Bearer " + test_successful_auth()}
     response = requests.get(API_URL + "/users/me/", headers=headers)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == 200
@@ -105,6 +107,7 @@ def test_missing_required_field_auth(request_body, status_code, schema, body_key
     response = requests.post(API_URL + "/auth/token/", json=request_body)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == status_code
@@ -123,6 +126,7 @@ def test_wrong_content_type_auth(request_body, status_code, headers, schema):
     response = requests.post(API_URL + "/auth/token/", headers=headers ,json=request_body)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == status_code
@@ -137,6 +141,7 @@ def test_invalid_json_auth():
     response = requests.post(API_URL + "/auth/token/", headers={"Content-Type": "application/json"}, data=request_body)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == 400
@@ -156,6 +161,7 @@ def test_invalid_body_type_auth(request_body, status_code,schema):
     response = requests.post(API_URL + "/auth/token/", json=request_body)
 
     print("\nStatus code: ", response.status_code)
+    print("Headers: ", response.headers)
     print("Body: ", response.text)
 
     assert response.status_code == status_code
